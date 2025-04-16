@@ -4,6 +4,15 @@ import 'dart:convert';
 
 class PokeApi {
   static final String _baseURL = dotenv.env['API_URL']!;
+  static Future<dynamic> fetchFromUrl(String url) async {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      return json.decode(res.body);
+    } else {
+      throw Exception('Failed to load data from $url');
+    }
+  }
+
   static Future<List> fetchMyPokemon({
     int? limit,
     required String apiName,
@@ -26,6 +35,18 @@ class PokeApi {
       }
     } catch (e) {
       throw FormatException("something went wrong due to $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> fetchSinglePokemon(
+    String pokemonName,
+  ) async {
+    final url = "$_baseURL/pokemon/${pokemonName.toLowerCase()}";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Pokémon not found with name or ID: $pokemonName");
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const Map<String, Color> typeColors = {
+  "all": Color(0xFF7F8C8D),
   "bug": Color(0xFF26DE81),
   "dragon": Color(0xFFFFEAA7),
   "electric": Color(0xFFFED330),

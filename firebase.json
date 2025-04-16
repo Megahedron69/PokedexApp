@@ -1,0 +1,41 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pokedex-2bb54",
+          "appId": "1:896422906630:android:1b150451d7a6e434a56c87",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "pokedex-2bb54",
+          "appId": "1:896422906630:ios:57f61f1f5cf294f0a56c87",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "pokedex-2bb54",
+          "appId": "1:896422906630:ios:57f61f1f5cf294f0a56c87",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pokedex-2bb54",
+          "configurations": {
+            "android": "1:896422906630:android:1b150451d7a6e434a56c87",
+            "ios": "1:896422906630:ios:57f61f1f5cf294f0a56c87",
+            "macos": "1:896422906630:ios:57f61f1f5cf294f0a56c87",
+            "web": "1:896422906630:web:7b3ddb273b163b5da56c87",
+            "windows": "1:896422906630:web:352702f077e448aba56c87"
+          }
+        }
+      }
+    }
+  }
+}

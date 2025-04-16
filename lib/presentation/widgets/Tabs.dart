@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/core/utils/Extensions.dart';
 import 'package:new_app/presentation/widgets/AboutWidget.dart';
 import 'package:new_app/presentation/widgets/BaseStatsWidget.dart';
 import 'package:new_app/presentation/widgets/EvolutionWidget.dart';
@@ -30,7 +31,10 @@ class TabbedLayout extends StatelessWidget {
                 Tab(text: 'Base Stats'),
                 Tab(text: 'Evolution'),
               ],
-              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: context.sw * 0.0385,
+              ),
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,
               indicator: BoxDecoration(
@@ -44,7 +48,14 @@ class TabbedLayout extends StatelessWidget {
           ),
           Expanded(
             child: TabBarView(
-              children: [AboutWidget(), BaseStatsWidget(), EvolutionWidget()],
+              children: [
+                AboutWidget(),
+                BaseStatsWidget(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: EvolutionChainWidget(),
+                ),
+              ],
             ),
           ),
         ],

@@ -32,14 +32,20 @@ class Colm1 extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
-        Text(
-          name.capitalize(),
-          textAlign: TextAlign.left,
-          softWrap: false,
-          style: const TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
+        Hero(
+          tag: "$name+z",
+          child: Material(
+            color: Colors.transparent,
+            child: Text(
+              name.capitalize(),
+              textAlign: TextAlign.left,
+              softWrap: false,
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 8),

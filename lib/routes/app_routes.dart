@@ -1,42 +1,116 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:new_app/presentation/screens/DetailScreen.dart';
+import 'package:new_app/presentation/screens/FavoritesScreen.dart';
 import 'package:new_app/presentation/screens/HomeScreen.dart';
+import 'package:new_app/presentation/screens/LoginScreen.dart';
+import 'package:new_app/presentation/screens/SearchScreen.dart';
+import 'package:new_app/providers/pokemon.providers.dart';
 
-final GoRouter appRouter = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        return NoTransitionPage(key: state.pageKey, child: const HomeScreen());
-      },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'details/:name',
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            final name = state.pathParameters['name'] ?? "Unknown";
-            final allData = state.extra as Map<String, dynamic>;
-            return CustomTransitionPage(
-              key: state.pageKey,
-              child: Detailscreen(name: name, allData: allData),
-              transitionsBuilder: (
-                context,
-                animation,
-                secondaryAnimation,
-                child,
-              ) {
-                return SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(1, 0), // Start off-screen (Right side)
-                    end: Offset.zero, // End at the final position
-                  ).animate(animation),
-                  child: child, // ✅ Add child here
-                );
-              },
-            );
-          },
-        ),
-      ],
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
+  }
+  late final StreamSubscription<dynamic> _subscription;
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
+final appRouterProvider = Provider<GoRouter>((ref) {
+  final userAsync = ref.watch(authStateProvider);
+
+  return GoRouter(
+    initialLocation: '/',
+    refreshListenable: GoRouterRefreshStream(
+      FirebaseAuth.instance.authStateChanges(),
     ),
-  ],
-);
+    redirect: (context, state) {
+      final isLoggedIn = userAsync.asData?.value != null;
+      final isGoingToLogin = state.uri.path == '/login';
+      if (!isLoggedIn && !isGoingToLogin) {
+        return '/login';
+      } else if (isLoggedIn && isGoingToLogin) {
+        return '/';
+      }
+      return null;
+    },
+    routes: [
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/',
+        pageBuilder: (context, state) {
+          return NoTransitionPage(child: const HomeScreen());
+        },
+        routes: [
+          GoRoute(
+            path: 'details/:name',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              final name = state.pathParameters['name'] ?? "Unknown";
+              final allData = state.extra as Map<String, dynamic>;
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: Detailscreen(name: name, allData: allData),
+                transitionsBuilder: (
+                  context,
+                  animation,
+                  secondaryAnimation,
+                  child,
+                ) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(1, 0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+            path: '/favs',
+            builder: (context, state) => const FavoritesScreen(),
+          ),
+          GoRoute(
+            path: "/search/:nameId",
+            pageBuilder: (context, state) {
+              final nameOrId = state.pathParameters['nameId'] ?? 'unknown';
+
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: Searchscreen(
+                  nameOrId: nameOrId,
+                ), // replace with your actual screen
+                transitionsBuilder: (
+                  context,
+                  animation,
+                  secondaryAnimation,
+                  child,
+                ) {
+                  const begin = Offset(0.0, -1.0);
+                  const end = Offset.zero;
+                  final tween = Tween(
+                    begin: begin,
+                    end: end,
+                  ).chain(CurveTween(curve: Curves.easeInOut));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+    ],
+  );
+});

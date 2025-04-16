@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:new_app/core/utils/Extensions.dart';
 
 final ThemeData lightTheme = ThemeData(
   fontFamily: GoogleFonts.poppins().fontFamily,
@@ -31,4 +32,12 @@ final ThemeData lightTheme = ThemeData(
     ),
     bodyMedium: TextStyle(fontSize: 16, color: Colors.black87),
   ),
+  extensions: [
+    ToastColors(
+      successBackground: Color(0xFF4CAF50), // Green for success
+      successForeground: Colors.white, // White text for success
+      errorBackground: Color(0xFFF44336), // Red for error
+      errorForeground: Colors.white, // White text for error
+    ),
+  ],
 );

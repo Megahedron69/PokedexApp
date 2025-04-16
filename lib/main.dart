@@ -1,14 +1,23 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:new_app/core/theme/DarkTheme.dart';
 import 'package:new_app/core/theme/LightTheme.dart';
+import 'package:new_app/providers/pokemon.providers.dart';
 import 'package:new_app/routes/app_routes.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  WidgetsFlutterBinding.ensureInitialized;
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Hive.initFlutter();
+  await Hive.openBox('favouritesBox');
   runApp(ProviderScope(child: MyApp()));
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -22,17 +31,19 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
+    final isDarkModez = ref.watch(isDarkMode);
     return MaterialApp.router(
       title: "My pokemon app",
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: isDarkModez ? ThemeMode.dark : ThemeMode.light,
       debugShowCheckedModeBanner: false,
-      routerConfig: appRouter,
+      routerConfig: router,
     );
   }
 }
