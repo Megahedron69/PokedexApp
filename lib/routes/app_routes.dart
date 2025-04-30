@@ -4,11 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:new_app/presentation/screens/AnimationScreen.dart';
 import 'package:new_app/presentation/screens/DetailScreen.dart';
 import 'package:new_app/presentation/screens/FavoritesScreen.dart';
 import 'package:new_app/presentation/screens/HomeScreen.dart';
 import 'package:new_app/presentation/screens/LoginScreen.dart';
+import 'package:new_app/presentation/screens/RadioScreen.dart';
 import 'package:new_app/presentation/screens/SearchScreen.dart';
+import 'package:new_app/presentation/screens/SliderScreen.dart';
+import 'package:new_app/presentation/widgets/ParentWidget.dart';
 import 'package:new_app/providers/pokemon.providers.dart';
 
 class GoRouterRefreshStream extends ChangeNotifier {
@@ -46,7 +50,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         pageBuilder: (context, state) {
-          return NoTransitionPage(child: const HomeScreen());
+          return NoTransitionPage(child: const ParentWidget());
         },
         routes: [
           GoRoute(
@@ -77,6 +81,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/favs',
             builder: (context, state) => const FavoritesScreen(),
+          ),
+          GoRoute(
+            path: '/sliders',
+            builder: (context, state) => const Sliderscreen(),
+          ),
+          GoRoute(
+            path: '/bluetooth',
+            builder: (context, state) => const Sliderscreen(),
+          ),
+          GoRoute(
+            path: '/radios',
+            builder: (context, state) => const Radioscreen(),
+          ),
+          GoRoute(
+            path: '/animations',
+            builder: (context, state) => const AnimationScreen(),
           ),
           GoRoute(
             path: "/search/:nameId",

@@ -112,7 +112,7 @@ class CardWidget extends ConsumerWidget {
               Hero(
                 tag: "$name+z",
                 child: Material(
-                  color: Colors.transparent, // Transparent to maintain the look
+                  color: Colors.transparent,
                   child: Text(
                     name.capitalize(),
                     textAlign: TextAlign.left,
