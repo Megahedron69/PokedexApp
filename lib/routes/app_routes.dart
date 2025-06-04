@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:new_app/presentation/screens/AnimationScreen.dart';
+import 'package:new_app/presentation/screens/BluetoothScreen.dart';
 import 'package:new_app/presentation/screens/DetailScreen.dart';
 import 'package:new_app/presentation/screens/FavoritesScreen.dart';
 import 'package:new_app/presentation/screens/HomeScreen.dart';
+import 'package:new_app/presentation/screens/LocationScreen.dart';
 import 'package:new_app/presentation/screens/LoginScreen.dart';
 import 'package:new_app/presentation/screens/RadioScreen.dart';
 import 'package:new_app/presentation/screens/SearchScreen.dart';
@@ -88,7 +90,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/bluetooth',
-            builder: (context, state) => const Sliderscreen(),
+            builder: (context, state) => const BluetoothScreen(),
           ),
           GoRoute(
             path: '/radios',
@@ -97,6 +99,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/animations',
             builder: (context, state) => const AnimationScreen(),
+          ),
+          GoRoute(
+            path: '/location',
+            builder: (context, state) => LocationScreen(),
           ),
           GoRoute(
             path: "/search/:nameId",
